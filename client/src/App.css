@@ -1,0 +1,124 @@
+.jarves{
+  width: 95vw;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  height: 100%;
+}
+
+::-webkit-scrollbar{
+  border-radius: 10px;
+  width: 10px;
+  background-color: antiquewhite;
+}
+::-webkit-scrollbar-thumb{
+background-color: rgb(255, 213, 0);
+border-radius: 10px;
+
+}
+
+.main-image{
+  background-image: url("jarvis.jpg");
+  background-size: cover;
+  
+}
+
+.command-box{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.command-text{
+  background: #7ebeee;
+  color: white;
+  border-radius: 10px;
+  padding: 6px;
+  font-weight: 700;
+  width: 45%;
+}
+
+.dialogue{
+  position: absolute;
+  top: 100px !important;
+  right: 10px !important;
+  width: 60%;
+  animation: slideIn 0.7s both;
+  z-index:10;
+  backdrop-filter: blur(5px);
+  height: 80%;
+  overflow: auto;
+}
+
+@keyframes slideIn {
+  0% { opacity: 0; transform: translateX(-100%); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+.animated-text{
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  font-size: 2em;
+}
+
+
+.main-sec{
+  animation: slideIn 0.7s forwards;
+}
+
+
+.animated-text h1 {
+  display: inline-block;
+  opacity: 0;
+  animation: slideIn 0.7s forwards;
+}
+
+.animated-text h1:nth-child(1) { animation-delay: 0s; }
+.animated-text h1:nth-child(2) { animation-delay: 0.1s; }
+.animated-text h1:nth-child(3) { animation-delay: 0.2s; }
+.animated-text h1:nth-child(4) { animation-delay: 0.3s; }
+.animated-text h1:nth-child(5) { animation-delay: 0.4s; }
+.animated-text h1:nth-child(6) { animation-delay: 0.5s; }
+
+
+.hide{
+  display: none !important;
+}
+
+.commands{
+  animation: slideIn 0.7s forwards;
+
+}
+
+.update-button{
+  width: 50%;
+    font-weight: 700;
+    font-family: system-ui;
+    background: skyblue;
+    color: white;
+    text-align: center;
+    margin-left: 30%;
+    cursor: pointer;
+}
+
+.login-heading{
+  background-color: white;
+  text-align: center;
+  border-radius: 25px;
+  color: #005c53;
+  font-size: 18px;
+  font-family: revert;
+}
+
+.back-but{
+  background: green;
+    padding: 5px;
+    border-radius: 9px;
+    font-size: 14px;
+    height: 31px;
+    cursor: pointer;
+}
