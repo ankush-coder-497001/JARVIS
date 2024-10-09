@@ -1,5 +1,0 @@
-GET  http://localhost:5000/User/findUser/66a8ed9503275e183fb05027
-Content-Type: application/json
-
-
-

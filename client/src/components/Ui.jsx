@@ -3,7 +3,7 @@ import '../App.css'
 import DailogueBox from './d-box';
 import { useNavigate } from 'react-router-dom';
 
-const Display = ({transcript,setIsListening,isListening})=>{
+const Display = ({transcript,setIsListening,isListening,readOut})=>{
 const [show,setshow] = useState('hide');
 const [hide,sethide] = useState('show');
 const [open,setopen] = useState(false);
@@ -20,7 +20,9 @@ setopen(!open);
   }
 
   const onupdateclick = ()=>{
- navigate("/updatecommands")
+  localStorage.removeItem('JarvisData');
+  readOut('please fill the details');
+  navigate("/")
 }
   return(
     <>
@@ -111,7 +113,7 @@ setopen(!open);
     <h3 className='main-sec' >Created-By-Ankush-Kumar-Gupta @2024</h3>
 </div>
 
-{open && <DailogueBox/>}
+{open && <DailogueBox readOut = {readOut}/>}
     </>
   )
 }

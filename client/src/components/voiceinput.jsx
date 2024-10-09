@@ -1,214 +1,151 @@
 import React, { useState, useEffect } from 'react';
 import Display from './Ui';
-import axios from 'axios';
 
 const VoiceInput = ({ onVoiceCommand }) => {
   const [isListening, setIsListening] = useState(false);
   const [transcript, setTranscript] = useState('');
-  const [mydata,setmydata] = useState({})
-  const [data , setdata] = useState({})
-  let recognition ;
+  const [mydata, setMyData] = useState({});
 
+  // Use a ref for recognition to avoid re-creating it on every render
+  const recognitionRef = React.useRef(null);
 
-useEffect(()=>{
-const localdata = JSON.parse(localStorage.getItem("JARVIS"));
-setdata(localdata);
-},[])
-
-
-//find user data
-
-useEffect(()=>{
-  try {
-    axios.get(`http://localhost:5000/User/findUser/${data._id}`).then((res)=>{
-      setmydata(res.data);
-      console.log(res.data);
-      console.log(mydata)
-    })
-  } catch (error) {
-    console.log(error.message)
-  }
-},[data])
-
+  // Find user data from local storage
+  useEffect(() => {
+    const data = JSON.parse(localStorage.getItem('JarvisData'));
+    setMyData(data || {}); // Ensure it defaults to an empty object if null
+  }, []);
 
   useEffect(() => {
-    const Start = ()=>{
-     recognition = new window.webkitSpeechRecognition();
-    recognition.continuous = true;
-
-   //defined here what we deliver in result 
-    recognition.onresult = (event) => {
-      const current = event.resultIndex;
-      let transcript = event.results[current][0].transcript;
-      transcript = transcript.toLowerCase();
-      setTranscript(transcript);
-      onVoiceCommand(transcript);
-
-
-
-
-      //personal commmands of user like profiles..
-      if(transcript.includes("linkedin profile")){
-        window.open(mydata.linkedin);
-        readOut("opening your linkedin profile sir");
+    const initializeRecognition = () => {
+      // Check if the browser supports SpeechRecognition
+      if (!window.webkitSpeechRecognition) {
+        readOut("Speech Recognition not supported in this browser");
+        return;
       }
 
-      if(transcript.includes("github profile")){
-        readOut("opening your github profile sir");
-        window.open(mydata.github);
+      // Initialize recognition if it's not already done
+      if (!recognitionRef.current) {
+        recognitionRef.current = new window.webkitSpeechRecognition();
+        recognitionRef.current.continuous = true;
+
+        recognitionRef.current.onresult = (event) => {
+          const current = event.resultIndex;
+          let transcript = event.results[current][0].transcript.toLowerCase();
+          setTranscript(transcript);
+          onVoiceCommand(transcript);
+          handleVoiceCommands(transcript);
+        };
+
+        recognitionRef.current.onend = () => {
+          if (isListening) {
+            readOut("Speech recognition stopped. Restarting...");
+            recognitionRef.current.start(); // Restart if listening
+          }
+        };
+
+        recognitionRef.current.onspeechend = () => {
+          readOut('Speech recognition stopped. Restarting...');
+          recognitionRef.current.start(); // Restart on speech end
+        };
       }
 
-      if(transcript.includes("gmail") || transcript.includes("open my mail section") ){
-        readOut("opening your Gmail sir");
-        window.open(mydata.mailLink);
+      if (isListening) {
+        const username = mydata?.name?.split(" ");
+        readOut(`Welcome, ${username[0] || ''}, I'm Jarvis, your personal assistant.`);
+        recognitionRef.current.start();
+      } else {
+        recognitionRef.current.stop();
       }
-
-
-      if(transcript.includes("google drive") || transcript.includes("open google drive") ){
-        readOut("opening your Google Drive sir");
-        window.open("https://drive.google.com/drive/");
-      }
-
-
-      if(transcript.includes(" leetcode ") || transcript.includes(" lead code") ){
-        readOut("opening leetcode  sir");
-        window.open(mydata.leetcode);
-      }
-
-      //Social media & other websites
-      if(transcript.includes("open github ")){
-        readOut("opening your github sir");
-        window.open("https://github.com/");
-      }
-
-
-      if(transcript.includes("internshala")){
-        readOut("opening your intern shala sir");
-        window.open("https://internshala.com/student/dashboard");
-      }
-
-      if(transcript.includes("youtube")){
-        readOut("opening youtube sir");
-      window.open("https://www.youtube.com/")
-   
-      }
-    
-      if(transcript.includes(" leetcode problems") || transcript.includes(" problems") ){
-        readOut("opening leetcode problems sir");
-        window.open("https://leetcode.com/problemset/");
-      }
-
-      if(transcript.includes("problems on")  ){
-        let input = transcript.split("");
-        input.splice(0,12);
-        input = input.join("")
-        console.log(input);
-        readOut("sure sir");
-        window.open(`https://leetcode.com/tag/${input}/`);
-      }
-      if(transcript.includes("chat gpt") || transcript.includes("chatgpt") || transcript.includes("gpt") || transcript.includes("chat")){
-     mywindow = window.open("https://chatgpt.com/","_blank")
-        readOut("sure")
-      }
-
-      if(transcript.includes("google maps") || transcript.includes("map") || transcript.includes("google map") || transcript.includes("map") ){
-        readOut("opening google maps");
-        window.open("https://www.google.com/maps");
-      }
-      if(transcript.includes("google meet") || transcript.includes("meet") || transcript.includes("meeting") ){
-        readOut("opening google meet");
-        window.open("https://meet.google.com/landing");
-      }
-
-      //automation commands
-      if(transcript.includes("search for") ){
-        let input = transcript.split("");
-        input.splice(0,11);
-        input = input.join("").split(" ").join("+");
-        console.log(input);
-        readOut("sure sir");
-        window.open(`https://www.google.com/search?q=${input}`);
-      }
-
-      if(transcript.includes("what is") ){
-        let input = transcript.split("");
-        input.splice(0,8);
-        input = input.join("").split(" ").join("+");
-        console.log(input);
-        readOut("sure sir");
-        window.open(`https://www.google.com/search?q=${input}`);
-      }
-
-      if(transcript.includes("play") || transcript.includes("show") ){
-        let input = transcript.split("");
-        input.splice(0,5);
-        input = input.join("").split(" ").join("+");
-        console.log(input);
-        readOut(`Ok `);
-        window.open(`https://www.youtube.com/results?search_query=${input}`);
-      }
-
-
-      //greetings and user intraction with JARVIS......
-
-      if(transcript.includes("how are you") ){
-        readOut("I am good , what about you");
-      }
-
-      if(transcript.includes("fine") || transcript.includes("im good")|| transcript.includes("great") || transcript.includes("good")){
-        readOut("That's good to hear");
-        readOut("so tell me, how can i help you");
-      }
-
-      if(transcript.includes("bro") || transcript.includes("hello jarvis") || transcript.includes("kaise ho") || transcript.includes("kaiseho")){
-        readOut("hello sir")
-      }
-      if(transcript.includes("ok") || transcript.includes("stop")){
-       getHumanLikeResponse(" ").then(res=>readOut("ok"))
-      }
-
-      if(transcript.includes("close the window") || transcript.includes("close this") || transcript.includes("closed")){
-     readOut("I Cant Do it for you")        
-      }
-
-      if(transcript.includes("who are you")){
-        readOut("im Jarves , your personal assistant");
-      }
-    
-      if(transcript.includes("thankyou") || transcript.includes("thank you") || transcript.includes("thanks")){
-        readOut("your welcome ")
-      }
-  
-    
     };
 
-    if (isListening) {
-      const username = mydata.name.split(" ")
-      readOut(`welcome ,${username[0]} , im jarvis`)
-      recognition.start();
-    }else{
-      recognition.stop()
+    initializeRecognition();
+
+    // Cleanup on unmount
+    return () => {
+      if (recognitionRef.current) {
+        recognitionRef.current.stop();
+        recognitionRef.current = null;
+      }
+    };
+  }, [isListening, mydata, onVoiceCommand]);
+
+  const handleVoiceCommands = (transcript) => {
+    // Define personal commands based on user data
+    const commands = {
+      "linkedin profile": () => openLink(mydata.linkedin, "please add the url for linkedin profile", "opening your linkedin profile"),
+      "github profile": () => openLink(mydata.github, "please add the url for github profile", "opening your github profile"),
+      "gmail": () => openLink(mydata.mailLink, "please add the url for your gmail", "opening your Gmail"),
+      "google drive": () => openLink("https://drive.google.com/drive/", null, "opening your Google Drive"),
+      "leetcode": () => openLink(mydata.leetcode, "please add the url for your leetcode profile", "opening leetcode"),
+      "whatsapp": () => openLink(mydata.whatsapp, "please add the url for your whatsapp", "opening your whatsapp account"),
+      "facebook": () => openLink(mydata.facebook, "please add the url for your facebook", "opening your facebook account"),
+      "instagram": () => openLink(mydata.instagram, "please add the url for your instagram", "opening your instagram account"),
+      "open github": () => openLink("https://github.com/", null, "opening your github"),
+      "internshala": () => openLink("https://internshala.com/student/dashboard", null, "opening your internshala"),
+      "youtube": () => openLink("https://www.youtube.com/", null, "opening youtube"),
+      "leetcode problems": () => openLink("https://leetcode.com/problemset/", null, "opening leetcode problems"),
+      "chat gpt": () => openLink("https://chatgpt.com/", null, "sure"),
+      "google maps": () => openLink("https://www.google.com/maps", null, "opening google maps"),
+      "google meet": () => openLink("https://meet.google.com/landing", null, "opening google meet"),
+      "search for": (input) => performSearch(input, "searching"),
+      "what is": (input) => performSearch(input, "searching"),
+      "play": (input) => performSearch(input, "playing"),
+      "how are you": () => readOut("I am good, what about you?"),
+      "fine": () => readOut("That's good to hear. How can I help you?"),
+      "bro": () => readOut("Hello sir"),
+      "ok": () => readOut("Ok"),
+      "close the window": () => readOut("Bye bye"),
+      "who are you": () => readOut("I'm Jarvis, your personal assistant"),
+      "thankyou": () => readOut("You're welcome"),
+      "hello jarvis":()=> readOut("hello, how are you"),
+      "hello ":()=> readOut("hello, how are you"),
+      "jarvis":()=> readOut("hello, how are you"),
+      "can you do":()=> readOut("i can do you browser task like searching or google , youtube , creating meeting , opening tabs and your social media profiles like linkedin or facebook"),
+      "your tasks":()=> readOut("i can do you browser task like searching or google , youtube , creating meeting , opening tabs and your social media profiles like linkedin or facebook"),
+      "tasks":()=> readOut("i can do you browser task like searching or google , youtube , creating meeting , opening tabs and your social media profiles like linkedin or facebook"),
+      "what are you doing":()=> readOut("i am a personal assistant , i can do you browser task like searching or google , youtube , creating meeting , opening tabs and your social media profiles like linkedin or facebook"),
+    };
+
+    for (const [key, command] of Object.entries(commands)) {
+      if (transcript.includes(key)) {
+        if (typeof command === 'function') {
+          // Extract input for search commands
+          const input = transcript.split(key)[1]?.trim();
+          command(input);
+        }
+        break; // Exit the loop after finding the first match
+      }
     }
+  };
 
-  }
-  Start()
-}, [isListening]);
+  const openLink = (link, fallbackMessage, successMessage) => {
+    if (!link) {
+      readOut(fallbackMessage);
+      return;
+    }
+    window.open(link);
+    readOut(successMessage);
+  };
 
+  const performSearch = (input, action) => {
+    const searchQuery = input.split(" ").join("+");
+    readOut(`${action} for ${searchQuery}`);
+    window.open(`https://www.google.com/search?q=${searchQuery}`);
+  };
 
-
-
-
-
-// Code for reading the response
-  const readOut = (message)=>{
+  const readOut = (message) => {
+    // Speak the message using speech synthesis
     const msg = new SpeechSynthesisUtterance(message);
-    msg.volume = 1.0;
+    msg.voice = window.speechSynthesis.getVoices().find(voice => voice.name === 'Alex');
+    msg.pitch = 1.2;
+    msg.rate = 1;
+    msg.volume = 0.8;
     window.speechSynthesis.speak(msg);
-  }
+  };
 
   return (
     <div>
-    <Display  transcript={transcript} setIsListening={setIsListening} isListening={isListening} />
+      <Display transcript={transcript} setIsListening={setIsListening} isListening={isListening} readOut={readOut} />
     </div>
   );
 };

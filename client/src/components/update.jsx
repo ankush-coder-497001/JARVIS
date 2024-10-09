@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 
 const UpdateCommands = () =>{
@@ -7,16 +6,16 @@ const UpdateCommands = () =>{
   const navigate = useNavigate();
   const [mydata,setmydata] = useState({});
 
+
   useEffect(()=>{
- const local = JSON.parse(localStorage.getItem("JARVIS"))
- setmydata(local)
+  const Localdata = JSON.parse(localStorage.getItem("JarvisData"));
+  if(Localdata){
+    navigate("/mainpage");
+  } 
   },[])
 
-
-  const [name ,setname] = useState("");
-  const [email ,setemail] = useState("");
-  const [phone ,setphone] = useState(0);
-  const [passowrd ,setpassword] = useState("");
+  
+  
   const [whatsapp ,setwhatsapp] = useState("");
   const [instagram ,setinstagram] = useState("");  
   const [linkedin ,setlinkedin] = useState("");  
@@ -24,109 +23,46 @@ const UpdateCommands = () =>{
   const [mailLink ,setmaillink] = useState("");  
   const [leetcode ,setleetcode] = useState("");  
   const [github ,setgithub] = useState("");  
+  const [name , setname] = useState("");
+  
 
 
   const handleOnSubmit =  (event)=>{
     event.preventDefault();
-
-
-   axios.put(`http://localhost:5000/User/update/${mydata._id}`,{name,email,passowrd,phone,whatsapp,instagram,linkedin,facebook,mailLink,leetcode,github})
-   .then((res)=>{
-    console.log(res)
-    navigate("/mainpage")
-   })
+    localStorage.setItem('JarvisData',JSON.stringify({name,whatsapp,instagram,linkedin,facebook,mailLink,leetcode,github}));
+    navigate('/mainpage')
   }
 
   const handleonback = ()=>{
     navigate("/mainpage")
-
   }
+
 
   return(
     <>
-     <header class="sticky top-0 z-10 flex items-center justify-between px-4 py-3 bg-background text-white bg-dark bg-gray-900  border-b border-muted dark:border-muted-foreground/20" style={{height:"40px"}}>
-    <div class="flex items-center gap-2">
-    <div class={`flex items-center jarves animated-text`}>
-      <h1 class="text-lg font-semibold">L</h1>
-      <h1 class="text-lg font-semibold">o</h1>
-      <h1 class="text-lg font-semibold">G</h1>
-      <h1 class="text-lg font-semibold">I</h1>
-      <h1 class="text-lg font-semibold">N</h1>
-      </div>
-    </div>
-    {/* <button class="back-but" onClick={handleonback} >Back</button> */}
-  </header>
-<div class="flex min-h-screen w-full items-center justify-center bg-cyan-300  p-4" style={{height:"calc(100vh - 40px)"}}>
-  <div class="grid w-full max-w-4xl grid-cols-1 gap-8 md:grid-cols-2 ">
-    <div class="relative rounded-lg bg-[rgba(255,255,255,0.5)] p-6 backdrop-blur-lg commands ">
-      <h2 class="mb-4 text-2xl font-bold text-[#1a1b1e] login-heading">Login</h2>
+
+<div class="flex min-h-screen  items-center justify-center  p-4 ">
+    <div class="relative rounded-lg bg-[rgba(255,255,255,0.5)] p-6 backdrop-blur-lg commands command ">
+      <h2 class="mb-4  font-bold text-[#1a1b1e] login-heading">Add links</h2>
       <form class="space-y-4">
-        <div>
-          <label
-            class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-[#1a1b1e]"
-            for="name"
-          >
-            Name
-          </label>
-          <input
-            class="flex h-10 w-full rounded-md border border-input px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 bg-[rgba(255,255,255,0.5)] text-[#1a1b1e] placeholder:text-[#1a1b1e]"
-            id="name"
-            placeholder="Enter your name"
-            type="text"
-            fdprocessedid="k1k7xa"
-           onChange={(e)=> setname(e.target.value)}
-          />
-        </div>
-        <div>
-          <label
-            class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-[#1a1b1e]"
-            for="email"
-          >
-            Email
-          </label>
-          <input
-            class="flex h-10 w-full rounded-md border border-input px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 bg-[rgba(255,255,255,0.5)] text-[#1a1b1e] placeholder:text-[#1a1b1e]"
-            id="email"
-            placeholder="Enter your email"
-            type="email"
-            fdprocessedid="hh5r2q"
-            onChange={e=> setemail(e.target.value)}
-          />
-        </div>
-        <div>
-          <label
-            class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-[#1a1b1e]"
-            for="phone"
-          >
-            Phone(optional)
-          </label>
-          <input
-            class="flex h-10 w-full rounded-md border border-input px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 bg-[rgba(255,255,255,0.5)] text-[#1a1b1e] placeholder:text-[#1a1b1e]"
-            id="phone"
-            placeholder="Enter your phone number"
-            type="number"
-            fdprocessedid="yxbpcl"
-            onChange={e=> setphone(e.target.value)}
-          />
-        </div>
-        <div>
+      <div>
           <label
             class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-[#1a1b1e]"
             for="company"
           >
-            Password
+            Your Name 
           </label>
           <input
             class="flex h-10 w-full rounded-md border border-input px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 bg-[rgba(255,255,255,0.5)] text-[#1a1b1e] placeholder:text-[#1a1b1e]"
             id="company"
-            placeholder="Enter your Password"
+            placeholder="Enter Your Name"
             type="text"
             fdprocessedid="4if9td"
-            onChange={e=> setpassword(e.target.value)}
+            onChange={e=> setname(e.target.value)}
 
           />
         </div>
-        <div>
+      <div>
           <label
             class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-[#1a1b1e]"
             for="company"
@@ -143,11 +79,6 @@ const UpdateCommands = () =>{
 
           />
         </div>
-      </form>
-    </div>
-    <div class="relative rounded-lg bg-[rgba(255,255,255,0.5)] p-6 backdrop-blur-lg commands ">
-      <h2 class="mb-4  font-bold text-[#1a1b1e] login-heading">Add links</h2>
-      <form class="space-y-4">
         <div>
           <label
             class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-[#1a1b1e]"
@@ -258,7 +189,6 @@ const UpdateCommands = () =>{
       </button>
     </div>
   </div>
-</div>
     </>
   )
 }

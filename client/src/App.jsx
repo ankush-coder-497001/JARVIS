@@ -14,9 +14,8 @@ const App = () => {
   };
 
 const router = createBrowserRouter([
-  {path:"/", element:<Commands/>},
+  {path:"/", element:<UpdateCommands/>},
   {path:"/mainpage", element:<VoiceInput onVoiceCommand={setResponse}/>},
-  {path:"/updatecommands" , element:<UpdateCommands/>}
 ])
 
   return (

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const DailogueBox = ()=>{
+const DailogueBox = ({readOut})=>{
 
   const [allcommands ,setcommand] = useState([]);
  const arr = [
@@ -19,6 +19,7 @@ const DailogueBox = ()=>{
 
  useEffect(()=>{
 setcommand(arr);
+readOut("here is the commands")
  },[])
 
   return(
