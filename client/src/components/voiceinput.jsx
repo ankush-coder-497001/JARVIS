@@ -79,7 +79,7 @@ const VoiceInput = ({ onVoiceCommand }) => {
       "facebook": () => openLink(mydata.facebook, "please add the url for your facebook", "opening your facebook account"),
       "instagram": () => openLink(mydata.instagram, "please add the url for your instagram", "opening your instagram account"),
       "open github": () => openLink("https://github.com/", null, "opening your github"),
-      "internshala": () => openLink("https://internshala.com/student/dashboard", null, "opening your internshala"),
+      "internshala": () => openLink("https://internshala.com/student/dashboard", null, "opening internshala"),
       "youtube": () => openLink("https://www.youtube.com/", null, "opening youtube"),
       "leetcode problems": () => openLink("https://leetcode.com/problemset/", null, "opening leetcode problems"),
       "chat gpt": () => openLink("https://chatgpt.com/", null, "sure"),
@@ -102,6 +102,9 @@ const VoiceInput = ({ onVoiceCommand }) => {
       "your tasks":()=> readOut("i can do you browser task like searching or google , youtube , creating meeting , opening tabs and your social media profiles like linkedin or facebook"),
       "tasks":()=> readOut("i can do you browser task like searching or google , youtube , creating meeting , opening tabs and your social media profiles like linkedin or facebook"),
       "what are you doing":()=> readOut("i am a personal assistant , i can do you browser task like searching or google , youtube , creating meeting , opening tabs and your social media profiles like linkedin or facebook"),
+      "how do i use you":()=>readOut("say search and your topic or what is javascript , for youtube search say , play and your topic name"),
+      "how to use":()=>readOut("say search and your topic or what is javascript , for youtube search say , play and your topic name"),
+      "use":()=>readOut("say search and your topic or what is javascript , for youtube search say , play and your topic name"),
     };
 
     for (const [key, command] of Object.entries(commands)) {
@@ -133,7 +136,7 @@ const VoiceInput = ({ onVoiceCommand }) => {
 
   function searchYouTube(query) {
     const modifiedQuery = query.replace(/^play\s+/i, ""); // Removes 'play' if it's at the start of the query
-
+   readOut(`playing,${modifiedQuery}`);
     const baseURL = "https://www.youtube.com/results?search_query=";
     const searchURL = baseURL + encodeURIComponent(modifiedQuery);
 
