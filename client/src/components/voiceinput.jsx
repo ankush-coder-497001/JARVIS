@@ -38,13 +38,11 @@ const VoiceInput = ({ onVoiceCommand }) => {
 
         recognitionRef.current.onend = () => {
           if (isListening) {
-            readOut("Speech recognition stopped. Restarting...");
             recognitionRef.current.start(); // Restart if listening
           }
         };
 
         recognitionRef.current.onspeechend = () => {
-          readOut('Speech recognition stopped. Restarting...');
           recognitionRef.current.start(); // Restart on speech end
         };
       }
