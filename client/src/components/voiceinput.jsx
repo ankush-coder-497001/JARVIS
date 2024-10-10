@@ -89,7 +89,7 @@ const VoiceInput = ({ onVoiceCommand }) => {
       "google meet": () => openLink("https://meet.google.com/landing", null, "opening google meet"),
       "search for": (input) => performSearch(input, "searching"),
       "what is": (input) => performSearch(input, "searching"),
-      "play": (input) => performSearch(input, "playing"),
+      "play": (input) => searchYouTube(input, "playing"),
       "how are you": () => readOut("I am good, what about you?"),
       "fine": () => readOut("That's good to hear. How can I help you?"),
       "bro": () => readOut("Hello sir"),
@@ -132,6 +132,15 @@ const VoiceInput = ({ onVoiceCommand }) => {
     readOut(`${action} for ${searchQuery}`);
     window.open(`https://www.google.com/search?q=${searchQuery}`);
   };
+
+  function searchYouTube(query) {
+    const modifiedQuery = query.replace(/^play\s+/i, ""); // Removes 'play' if it's at the start of the query
+
+    const baseURL = "https://www.youtube.com/results?search_query=";
+    const searchURL = baseURL + encodeURIComponent(modifiedQuery);
+
+    window.open(searchURL, "_blank");
+}
 
   const readOut = (message) => {
     // Speak the message using speech synthesis
