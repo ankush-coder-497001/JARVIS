@@ -5,7 +5,7 @@ const VoiceInput = ({ onVoiceCommand }) => {
   const [isListening, setIsListening] = useState(false);
   const [transcript, setTranscript] = useState('');
   const [mydata, setMyData] = useState({});
-
+  const [newWindow, setNewWindow] = useState(null);
   // Use a ref for recognition to avoid re-creating it on every render
   const recognitionRef = React.useRef(null);
 
@@ -92,7 +92,7 @@ const VoiceInput = ({ onVoiceCommand }) => {
       "fine": () => readOut("That's good to hear. How can I help you?"),
       "bro": () => readOut("Hello sir"),
       "ok": () => readOut("Ok"),
-      "close the window": () => readOut("Bye bye"),
+      "close the window": () => closeWindow("sure"),
       "who are you": () => readOut("I'm Jarvis, your personal assistant"),
       "thankyou": () => readOut("You're welcome"),
       "hello jarvis":()=> readOut("hello, how are you"),
@@ -131,7 +131,8 @@ const VoiceInput = ({ onVoiceCommand }) => {
   const performSearch = (input, action) => {
     const searchQuery = input.split(" ").join("+");
     readOut(`${action} for ${searchQuery}`);
-    window.open(`https://www.google.com/search?q=${searchQuery}`);
+  const openedWindow = window.open(`https://www.google.com/search?q=${searchQuery}`);
+  setNewWindow(openedWindow);
   };
 
   function searchYouTube(query) {
@@ -141,6 +142,15 @@ const VoiceInput = ({ onVoiceCommand }) => {
     const searchURL = baseURL + encodeURIComponent(modifiedQuery);
 
     window.open(searchURL, "_blank");
+}
+
+const closeWindow = (text)=>{
+  if(newWindow){
+    newWindow.close();
+   setNewWindow(null);
+   readOut(text);
+  }
+  console.log("closed",newWindow)
 }
 
   const readOut = (message) => {
