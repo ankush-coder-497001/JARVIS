@@ -131,7 +131,8 @@ const VoiceInput = ({ onVoiceCommand }) => {
 
   const performSearch = (input, action) => {
     const searchQuery = input.split(" ").join("+");
-    readOut(`${action} for ${searchQuery}`);
+    const mainstr = searchQuery.split("+").join("");
+    readOut(`${action} for ${mainstr}`);
   const openedWindow = window.open(`https://www.google.com/search?q=${searchQuery}`);
   setNewWindow(openedWindow);
   };
