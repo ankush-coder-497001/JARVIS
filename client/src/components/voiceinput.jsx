@@ -87,6 +87,7 @@ const VoiceInput = ({ onVoiceCommand }) => {
       "google meet": () => openLink("https://meet.google.com/landing", null, "opening google meet"),
       "search for": (input) => performSearch(input, "searching"),
       "what is": (input) => performSearch(input, "searching"),
+      "who is": (input) => performSearch(input, "searching"),
       "play": (input) => searchYouTube(input, "playing"),
       "how are you": () => readOut("I am good, what about you?"),
       "fine": () => readOut("That's good to hear. How can I help you?"),
