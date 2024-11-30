@@ -6,24 +6,28 @@ const VoiceInput = ({ onVoiceCommand }) => {
   const [transcript, setTranscript] = useState('');
   const [mydata, setMyData] = useState({});
   const [newWindow, setNewWindow] = useState(null);
-  // Use a ref for recognition to avoid re-creating it on every render
   const recognitionRef = React.useRef(null);
+  const [weather,setWeather] = useState(null)
+  const [newz,setNewz] = useState(null)
 
-  // Find user data from local storage
   useEffect(() => {
+    FetchNewz()
     const data = JSON.parse(localStorage.getItem('JarvisData'));
-    setMyData(data || {}); // Ensure it defaults to an empty object if null
+    setMyData(data || {}); 
   }, []);
+
+  useEffect(()=>{
+    FetchWeather()
+  },[])
+
 
   useEffect(() => {
     const initializeRecognition = () => {
-      // Check if the browser supports SpeechRecognition
       if (!window.webkitSpeechRecognition) {
         readOut("Speech Recognition not supported in this browser");
         return;
       }
 
-      // Initialize recognition if it's not already done
       if (!recognitionRef.current) {
         recognitionRef.current = new window.webkitSpeechRecognition();
         recognitionRef.current.continuous = true;
@@ -58,7 +62,6 @@ const VoiceInput = ({ onVoiceCommand }) => {
 
     initializeRecognition();
 
-    // Cleanup on unmount
     return () => {
       if (recognitionRef.current) {
         recognitionRef.current.stop();
@@ -68,7 +71,6 @@ const VoiceInput = ({ onVoiceCommand }) => {
   }, [isListening, mydata, onVoiceCommand]);
 
   const handleVoiceCommands = (transcript) => {
-    // Define personal commands based on user data
     const commands = {
       "linkedin profile": () => openLink(mydata.linkedin, "please add the url for linkedin profile", "opening your linkedin profile"),
       "github profile": () => openLink(mydata.github, "please add the url for github profile", "opening your github profile"),
@@ -86,10 +88,12 @@ const VoiceInput = ({ onVoiceCommand }) => {
       "google maps": () => openLink("https://www.google.com/maps", null, "opening google maps"),
       "google meet": () => openLink("https://meet.google.com/landing", null, "opening google meet"),
       "search for": (input) => performSearch(input, "searching"),
+      "search ": (input) => performSearch(input, "searching"),
       "what is": (input) => performSearch(input, "searching"),
       "who is": (input) => performSearch(input, "searching"),
       "play": (input) => searchYouTube(input, "playing"),
       "how are you": () => readOut("I am good, what about you?"),
+      "what about you": () => readOut("I am good"),
       "fine": () => readOut("That's good to hear. How can I help you?"),
       "bro": () => readOut("Hello sir"),
       "ok": () => readOut("Ok"),
@@ -99,6 +103,9 @@ const VoiceInput = ({ onVoiceCommand }) => {
       "hello jarvis":()=> readOut("hello, how are you"),
       "hello ":()=> readOut("hello, how are you"),
       "jarvis":()=> readOut("hello, how are you"),
+      "good":()=> readOut("oh , ok"),
+      "great":()=> readOut("good to here"),
+      "nice":()=> readOut("good to here"),
       "can you do":()=> readOut("i can do you browser task like searching or google , youtube , creating meeting , opening tabs and your social media profiles like linkedin or facebook"),
       "your tasks":()=> readOut("i can do you browser task like searching or google , youtube , creating meeting , opening tabs and your social media profiles like linkedin or facebook"),
       "tasks":()=> readOut("i can do you browser task like searching or google , youtube , creating meeting , opening tabs and your social media profiles like linkedin or facebook"),
@@ -106,19 +113,42 @@ const VoiceInput = ({ onVoiceCommand }) => {
       "how do i use you":()=>readOut("say search and your topic or what is javascript , for youtube search say , play and your topic name"),
       "how to use":()=>readOut("say search and your topic or what is javascript , for youtube search say , play and your topic name"),
       "use":()=>readOut("say search and your topic or what is javascript , for youtube search say , play and your topic name"),
+      "newz":()=>TellNewz("sure"),
+      "news":()=>TellNewz("sure"),
+      "latest":()=>TellNewz("sure"),
+      "headlines":()=>TellNewz("sure"),
+      "headline":()=>TellNewz("sure"),
+      "weather":()=>TellWeather("sure"),
     };
 
     for (const [key, command] of Object.entries(commands)) {
       if (transcript.includes(key)) {
         if (typeof command === 'function') {
-          // Extract input for search commands
           const input = transcript.split(key)[1]?.trim();
           command(input);
         }
-        break; // Exit the loop after finding the first match
+        break; 
       }
     }
   };
+
+  const TellNewz = (text)=>{
+   readOut(text);
+   const random =Math.floor(Math.random()*10);
+   const news = newz[random]?.description;
+   readOut(`todays headlines are ,  ${news}`);
+  }
+
+  const TellWeather = (text) =>{
+    if(!weather){
+      return;
+    }
+    readOut(text);
+    const city = weather?.location?.name;
+    const deg = weather?.current?.temp_c
+    const inv = weather?.current?.condition?.text     
+    readOut(`in ${city} there is ${deg} degree temprature and weather is ${inv}`)
+  }
 
   const openLink = (link, fallbackMessage, successMessage) => {
     if (!link) {
@@ -145,7 +175,6 @@ const VoiceInput = ({ onVoiceCommand }) => {
 
     window.open(searchURL, "_blank");
 }
-
 const closeWindow = (text)=>{
   if(newWindow){
     newWindow.close();
@@ -153,6 +182,22 @@ const closeWindow = (text)=>{
    readOut(text);
   }
   console.log("closed",newWindow)
+}
+const FetchWeather =()=>{
+  fetch(`http://api.weatherapi.com/v1/current.json?key=6d59e65cfd974bec95c35236242911&q=${mydata?mydata?.city:"ambikapur"}`)
+  .then((res)=>res.json())
+  .then((data)=>{
+    setWeather(data)
+  })
+  .catch((err)=>console.log(err))
+}
+const FetchNewz =()=>{
+  fetch(`https://newsdata.io/api/1/news?apikey=pub_6082846201c51760e32f0f88540fdeace2017&q=politics&country=in&language=en,hi&category=crime,education,entertainment,politics,science`)
+  .then((res)=>res.json())
+  .then((data)=>{
+    setNewz(data.results)
+  })
+  .catch((err)=>console.log(err))
 }
 
   const readOut = (message) => {
@@ -167,7 +212,7 @@ const closeWindow = (text)=>{
 
   return (
     <div>
-      <Display transcript={transcript} setIsListening={setIsListening} isListening={isListening} readOut={readOut} />
+      <Display transcript={transcript} setIsListening={setIsListening} isListening={isListening} readOut={readOut} weather={weather} />
     </div>
   );
 };

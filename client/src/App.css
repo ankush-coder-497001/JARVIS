@@ -41,6 +41,10 @@ border-radius: 10px;
   width: 45%;
 }
 
+.show{
+ transform: scale(1);
+}
+
 .dialogue{
   position: absolute;
   top: 100px !important;
@@ -87,7 +91,7 @@ border-radius: 10px;
 
 
 .hide{
-  display: none !important;
+  transform: scale(0);
 }
 
 .commands{
@@ -122,4 +126,62 @@ border-radius: 10px;
     font-size: 14px;
     height: 31px;
     cursor: pointer;
+}
+
+@keyframes rotate {
+  0% { transform: rotate3d(0, 1, 0, 0deg); }
+  100% { transform: rotate3d(0, 1, 0, 360deg); }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+@keyframes fadeInFromLeft {
+  0% { opacity: 0; transform: translateX(-50px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+@keyframes fadeInFromRight {
+  0% { opacity: 0; transform: translateX(50px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+@keyframes fadeInFromTop {
+  0% { opacity: 0; transform: translateY(-50px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeInFromBottom {
+  0% { opacity: 0; transform: translateY(50px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+.space-bg {
+  background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
+}
+.robot {
+  animation: rotate 10s linear infinite, float 5s ease-in-out infinite, fadeInFromLeft 1s ease-out;
+}
+.glow {
+  box-shadow: 0 0 15px #4FD1C5;
+}
+.particle {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background-color: #ffffff;
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+.fade-in-left {
+  animation: fadeInFromLeft 1s ease-out;
+}
+.fade-in-right {
+  animation: fadeInFromRight 1s ease-out;
+}
+.fade-in-top {
+  animation: fadeInFromTop 1s ease-out;
+}
+.fade-in-bottom {
+  animation: fadeInFromBottom 1s ease-out;
 }

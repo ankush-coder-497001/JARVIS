@@ -24,12 +24,13 @@ const UpdateCommands = () =>{
   const [leetcode ,setleetcode] = useState("");  
   const [github ,setgithub] = useState("");  
   const [name , setname] = useState("");
+  const [city , setcity] = useState("");
   
 
 
   const handleOnSubmit =  (event)=>{
     event.preventDefault();
-    localStorage.setItem('JarvisData',JSON.stringify({name,whatsapp,instagram,linkedin,facebook,mailLink,leetcode,github}));
+    localStorage.setItem('JarvisData',JSON.stringify({name,whatsapp,instagram,linkedin,facebook,mailLink,leetcode,github,city}));
     navigate('/mainpage')
   }
 
@@ -59,6 +60,23 @@ const UpdateCommands = () =>{
             type="text"
             fdprocessedid="4if9td"
             onChange={e=> setname(e.target.value)}
+
+          />
+        </div>
+      <div>
+          <label
+            class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-[#1a1b1e]"
+            for="company"
+          >
+            City Name
+          </label>
+          <input
+            class="flex h-10 w-full rounded-md border border-input px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 bg-[rgba(255,255,255,0.5)] text-[#1a1b1e] placeholder:text-[#1a1b1e]"
+            id="company"
+            placeholder="Enter Your Name"
+            type="text"
+            fdprocessedid="4if9td"
+            onChange={e=> setcity(e.target.value)}
 
           />
         </div>
