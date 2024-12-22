@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Display from './Ui';
+import axios from 'axios';
+import Loader from './Loader';
 
 const VoiceInput = ({ onVoiceCommand }) => {
   const [isListening, setIsListening] = useState(false);
@@ -9,6 +11,7 @@ const VoiceInput = ({ onVoiceCommand }) => {
   const recognitionRef = React.useRef(null);
   const [weather,setWeather] = useState(null)
   const [newz,setNewz] = useState(null)
+  const [Loading,setLoading] = useState(false);
 
   useEffect(() => {
     FetchNewz()
@@ -18,7 +21,7 @@ const VoiceInput = ({ onVoiceCommand }) => {
 
   useEffect(()=>{
     FetchWeather()
-  },[])
+  },[isListening])
 
 
   useEffect(() => {
@@ -89,8 +92,8 @@ const VoiceInput = ({ onVoiceCommand }) => {
       "google meet": () => openLink("https://meet.google.com/landing", null, "opening google meet"),
       "search for": (input) => performSearch(input, "searching"),
       "search ": (input) => performSearch(input, "searching"),
-      "what is": (input) => performSearch(input, "searching"),
-      "who is": (input) => performSearch(input, "searching"),
+      "what is": (input) => handleGenerate(transcript),
+      "who is": (input) => handleGenerate(transcript),
       "play": (input) => searchYouTube(input, "playing"),
       "how are you": () => readOut("I am good, what about you?"),
       "what about you": () => readOut("I am good"),
@@ -119,6 +122,7 @@ const VoiceInput = ({ onVoiceCommand }) => {
       "headlines":()=>TellNewz("sure"),
       "headline":()=>TellNewz("sure"),
       "weather":()=>TellWeather("sure"),
+      "tell me":()=>handleGenerate(transcript) 
     };
 
     for (const [key, command] of Object.entries(commands)) {
@@ -200,6 +204,19 @@ const FetchNewz =()=>{
   .catch((err)=>console.log(err))
 }
 
+const handleGenerate = async (inputText) => {
+  setLoading(true);
+  try {
+      const response = await axios.post('http://127.0.0.1:5000/generate', { input_text: inputText });
+      readOut(response.data.output);
+  } catch (error) {
+      console.error("Error generating text:", error);
+      readOut("An error occurred. Please try again.");
+  } finally {
+      setLoading(false);
+  }
+};
+
   const readOut = (message) => {
     // Speak the message using speech synthesis
     const msg = new SpeechSynthesisUtterance(message);
@@ -213,6 +230,7 @@ const FetchNewz =()=>{
   return (
     <div>
       <Display transcript={transcript} setIsListening={setIsListening} isListening={isListening} readOut={readOut} weather={weather} />
+      {Loading && <Loader/>}
     </div>
   );
 };
