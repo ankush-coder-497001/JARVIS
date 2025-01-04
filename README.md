@@ -63,5 +63,5 @@ To run Jarvis locally:
 ##Feedback
 **We’d love to hear from you!**
 **For feedback, suggestions, or support, contact:**
--**Email**: ankushcoder497001@gmail.com
--**Phone**: +91 9301579493
+-**Email**: ankushcoder497001@gmail.com.
+-**Phone**: +91 9301579493.
