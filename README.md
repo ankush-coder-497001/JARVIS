@@ -1,61 +1,67 @@
-# Jarvis - Your Personal Assistant
+# Jarvis - Your Smart Personal Assistant
 
-Jarvis is a voice-activated personal assistant created using React. It allows users to interact with their browsers through voice commands, perform searches, open daily-use websites, schedule tasks, and much more. This project was developed to make browsing and daily tasks easier and more efficient by leveraging modern frontend technologies.
+Jarvis is a voice-activated personal assistant designed to automate browser tasks and act as a virtual friend running in the background. It helps users perform web searches, open websites, manage tasks, and answer questions using simple voice commands. Whether you’re a student or a working professional, Jarvis enhances productivity and makes browsing smarter and faster.
 
 ## Features
 
-- **Voice Commands**: Perform most browser functions using simple voice commands.
-- **Website Navigation**: Easily open commonly used websites with a single voice command.
-- **Search Functionality**: Search for information across the web using voice input.
-- **Task Scheduling**: Set reminders and schedule tasks efficiently using voice commands.
+- **Web Search**: Ask questions using the keyword "Jarvis" to get quick answers.  
+  Example:  
+  - "Jarvis, who is the prime minister of India?"  
+  - "Jarvis, define artificial intelligence."
 
-## Technologies Used
+- **Social Media and Website Access**: Instantly open social media profiles or frequently visited websites. Customize these URLs to match your preferences.  
+  Example:  
+  - "Open my LinkedIn profile."  
 
-- **React**: Frontend framework for building user interfaces.
-- **Speech Recognition API**: Enables voice command functionality without the need for a server.
-- **Browser Local Storage**: Stores custom commands and preferences locally for a smooth user experience.
+- **YouTube Playback**: Play YouTube videos using the keyword "play."  
+  Example:  
+  - "Play lo-fi music."  
+  - "Play React tutorials."  
 
-## Installation
+- **Browser Automation**: Perform specific searches by using the keyword "search" or "search for."  
+  Example:  
+  - "Search for best programming languages."  
+  - "Search who is Elon Musk."  
 
-To run Jarvis on your local machine:
+- **Meeting Management**: Create and manage meetings directly through voice commands.  
 
-1. **Clone the Repository**:
-    ```bash
-    git clone https://github.com/your-username/jarvis-react.git
-    ```
+- **Weather and News Updates**: Get real-time weather information and the latest news.  
 
-2. **Navigate to the Project Directory**:
-    ```bash
-    cd jarvis-react
-    ```
+## How to Use Jarvis
 
-3. **Install Dependencies**:
-    ```bash
-    npm install
-    ```
+1. Visit the official Jarvis website: [https://j-a-r-v-i-s.netlify.app/](https://j-a-r-v-i-s.netlify.app/).
+2. Speak your commands following these simple rules:
+   - Include "Jarvis" in your query for answers.
+   - Use "play" to start YouTube videos.
+   - Use "search" or "search for" to search the web.
+3. Customize Jarvis by adding your own social media profile links.
 
-4. **Start the Application**:
-    ```bash
-    npm start
-    ```
+### Examples
+- "Jarvis, how far is the sun from Earth?"  
+- "Play cartoon videos."  
+- "Search for Python tutorials."
 
-5. Open your browser and go to `http://localhost:3000`. Jarvis will be up and running!
+## Device Compatibility
 
-## Usage
+Jarvis works on all devices, including desktops, laptops, tablets, and smartphones. It supports all modern browsers and does not require installation.
 
-- Simply speak your commands, and Jarvis will execute them.
-- You can add custom commands for websites or tasks by accessing the settings in the application.
-- Examples of voice commands:
-  - "Open YouTube"
-  - "Search for JavaScript tutorials"
-  - "Schedule a meeting for tomorrow at 10 AM"
+## Technology Stack
 
-## Contributing
+- **React**: Frontend framework for building the user interface.
+- **Speech Recognition API**: Enables voice command functionality.
+- **Netlify**: Deployment platform for hosting Jarvis.
+- **Local Storage**: Stores user preferences and custom commands.
 
-If you’d like to contribute to this project:
+## Installation for Developers
 
-1. Fork the repository.
-2. Create a new branch.
-3. Make your changes.
-4. Submit a pull request.
+To run Jarvis locally:
 
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-username/jarvis.git
+
+##Feedback
+**We’d love to hear from you!**
+**For feedback, suggestions, or support, contact:**
+-**Email**: ankushcoder497001@gmail.com
+-**Phone**: +91 9301579493
