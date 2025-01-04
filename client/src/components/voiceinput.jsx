@@ -12,6 +12,7 @@ const VoiceInput = ({ onVoiceCommand }) => {
   const [weather,setWeather] = useState(null)
   const [newz,setNewz] = useState(null)
   const [Loading,setLoading] = useState(false);
+  const [result,setresult] = useState()
 
   useEffect(() => {
     FetchNewz()
@@ -40,7 +41,11 @@ const VoiceInput = ({ onVoiceCommand }) => {
           let transcript = event.results[current][0].transcript.toLowerCase();
           setTranscript(transcript);
           onVoiceCommand(transcript);
-          handleVoiceCommands(transcript);
+          if(transcript.includes("hey jarvis") || transcript.includes("jarvis") ){
+            handleGenerate(transcript)
+          }else{
+             handleVoiceCommands(transcript);
+          }
         };
 
         recognitionRef.current.onend = () => {
@@ -92,37 +97,21 @@ const VoiceInput = ({ onVoiceCommand }) => {
       "google meet": () => openLink("https://meet.google.com/landing", null, "opening google meet"),
       "search for": (input) => performSearch(input, "searching"),
       "search ": (input) => performSearch(input, "searching"),
-      "what is": (input) => handleGenerate(transcript),
-      "who is": (input) => handleGenerate(transcript),
       "play": (input) => searchYouTube(input, "playing"),
-      "how are you": () => readOut("I am good, what about you?"),
-      "what about you": () => readOut("I am good"),
-      "fine": () => readOut("That's good to hear. How can I help you?"),
-      "bro": () => readOut("Hello sir"),
       "ok": () => readOut("Ok"),
-      "close the window": () => closeWindow("sure"),
       "who are you": () => readOut("I'm Jarvis, your personal assistant"),
       "thankyou": () => readOut("You're welcome"),
       "hello jarvis":()=> readOut("hello, how are you"),
       "hello ":()=> readOut("hello, how are you"),
-      "jarvis":()=> readOut("hello, how are you"),
       "good":()=> readOut("oh , ok"),
       "great":()=> readOut("good to here"),
       "nice":()=> readOut("good to here"),
-      "can you do":()=> readOut("i can do you browser task like searching or google , youtube , creating meeting , opening tabs and your social media profiles like linkedin or facebook"),
-      "your tasks":()=> readOut("i can do you browser task like searching or google , youtube , creating meeting , opening tabs and your social media profiles like linkedin or facebook"),
-      "tasks":()=> readOut("i can do you browser task like searching or google , youtube , creating meeting , opening tabs and your social media profiles like linkedin or facebook"),
-      "what are you doing":()=> readOut("i am a personal assistant , i can do you browser task like searching or google , youtube , creating meeting , opening tabs and your social media profiles like linkedin or facebook"),
-      "how do i use you":()=>readOut("say search and your topic or what is javascript , for youtube search say , play and your topic name"),
-      "how to use":()=>readOut("say search and your topic or what is javascript , for youtube search say , play and your topic name"),
-      "use":()=>readOut("say search and your topic or what is javascript , for youtube search say , play and your topic name"),
       "newz":()=>TellNewz("sure"),
       "news":()=>TellNewz("sure"),
       "latest":()=>TellNewz("sure"),
       "headlines":()=>TellNewz("sure"),
       "headline":()=>TellNewz("sure"),
       "weather":()=>TellWeather("sure"),
-      "tell me":()=>handleGenerate(transcript) 
     };
 
     for (const [key, command] of Object.entries(commands)) {
@@ -205,10 +194,13 @@ const FetchNewz =()=>{
 }
 
 const handleGenerate = async (inputText) => {
+  const modifiedQuery = inputText.replace(/^jarvis\s+/i, "");
+  console.log(modifiedQuery)
   setLoading(true);
   try {
-      const response = await axios.post('http://127.0.0.1:5000/generate', { input_text: inputText });
-      readOut(response.data.output);
+      const response = await axios.post('http://localhost:5001/generate', { text: modifiedQuery });
+      setresult(response.data);
+      readOut(response.data);
   } catch (error) {
       console.error("Error generating text:", error);
       readOut("An error occurred. Please try again.");
@@ -217,20 +209,49 @@ const handleGenerate = async (inputText) => {
   }
 };
 
-  const readOut = (message) => {
-    // Speak the message using speech synthesis
-    const msg = new SpeechSynthesisUtterance(message);
-    msg.voice = window.speechSynthesis.getVoices().find(voice => voice.name === 'Alex');
-    msg.pitch = 1.2;
-    msg.rate = 1;
-    msg.volume = 0.8;
-    window.speechSynthesis.speak(msg);
-  };
+const readOut = (message) => {
+  // Check if SpeechSynthesis is supported
+
+  const voiceName = 'Alex'
+  const  pitch = 1.2
+  const  rate = 0.8
+  const volume = 0.8
+
+  if (!window.speechSynthesis) {
+    console.error("Speech Synthesis not supported in this browser.");
+    return;
+  }
+
+  // Get available voices
+  const voices = window.speechSynthesis.getVoices();
+
+  // Find the desired voice by name
+  const selectedVoice = voices.find(voice => voice.name === voiceName);
+
+  // Fallback if the desired voice is not available
+  if (!selectedVoice) {
+    console.warn(`Voice "${voiceName}" not found. Using the default voice.`);
+  }
+
+  // Create a new SpeechSynthesisUtterance instance
+  const msg = new SpeechSynthesisUtterance(message);
+  msg.voice = selectedVoice || voices[0]; // Use the selected voice or the first available
+  msg.pitch = pitch; // Set the pitch
+  msg.rate = rate;   // Set the speaking rate
+  msg.volume = volume; // Set the volume
+
+  // Speak the message
+  window.speechSynthesis.speak(msg);
+
+  // Log the action (optional)
+};
+
+
 
   return (
     <div>
-      <Display transcript={transcript} setIsListening={setIsListening} isListening={isListening} readOut={readOut} weather={weather} />
-      {Loading && <Loader/>}
+      <Display transcript={transcript} result ={result} setIsListening={setIsListening} isListening={isListening} readOut={readOut} weather={weather} />
+      {Loading &&  <Loader/>}
     </div>
   );
 };

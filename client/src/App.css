@@ -185,3 +185,119 @@ border-radius: 10px;
 .fade-in-bottom {
   animation: fadeInFromBottom 1s ease-out;
 }
+
+
+
+.glow {
+  animation: glow 2s ease-in-out infinite alternate;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #FFF574, #1A1F2E);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, #FFF574, #1A1F2E, #0A0E17);
+}
+
+/* Additional global styles */
+body {
+  font-family: 'Roboto', sans-serif;
+}
+
+.text-shadow {
+  text-shadow: 0 0 10px rgba(255, 245, 116, 0.5);
+}
+
+.glassmorphism {
+  background: rgba(26, 31, 46, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 245, 116, 0.2);
+}
+
+/* Star background animation */
+.stars {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background-image: 
+    radial-gradient(2px 2px at 20px 30px, #FFF574, rgba(0,0,0,0)),
+    radial-gradient(2px 2px at 40px 70px, #FFF574, rgba(0,0,0,0)),
+    radial-gradient(2px 2px at 50px 160px, #FFF574, rgba(0,0,0,0)),
+    radial-gradient(2px 2px at 90px 40px, #FFF574, rgba(0,0,0,0)),
+    radial-gradient(2px 2px at 130px 80px, #FFF574, rgba(0,0,0,0)),
+    radial-gradient(2px 2px at 160px 120px, #FFF574, rgba(0,0,0,0));
+  background-repeat: repeat;
+  background-size: 200px 200px;
+  animation: twinkle 10s infinite linear;
+}
+
+@keyframes twinkle {
+  from { background-position: 0 0; }
+  to { background-position: -200px 200px; }
+}
+
+/* Logo animations */
+.logo-orbit {
+  animation: spin 20s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-spin-slow {
+  animation: spin 10s linear infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { 
+    box-shadow: 0 0 5px #FFF574, 0 0 10px #FFF574;
+    transform: scale(1);
+  }
+  50% { 
+    box-shadow: 0 0 20px #FFF574, 0 0 30px #FFF574;
+    transform: scale(1.05);
+  }
+}
+
+.logo-container:hover .logo-circle {
+  animation: pulse-glow 2s infinite;
+}
+
+/* Transcript container animations */
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.transcript-container:hover {
+  animation: pulse 2s infinite;
+}
+
+/* Button hover effect */
+.hover-effect {
+  transition: all 0.3s ease;
+}
+
+.hover-effect:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 20px rgba(255, 245, 116, 0.2);
+}
+
+/* Add any additional global styles here */
