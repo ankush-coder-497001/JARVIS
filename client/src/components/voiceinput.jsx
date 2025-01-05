@@ -198,7 +198,7 @@ const handleGenerate = async (inputText) => {
   console.log(modifiedQuery)
   setLoading(true);
   try {
-      const response = await axios.post('http://localhost:5001/generate', { text: modifiedQuery });
+      const response = await axios.post('https://jarvis-1-u40v.onrender.com/generate', { text: modifiedQuery });
       setresult(response.data);
       readOut(response.data);
   } catch (error) {
