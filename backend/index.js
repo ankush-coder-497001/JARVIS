@@ -2,6 +2,7 @@ const express  = require('express');
 const cors = require('cors')
 const dotenv = require('dotenv');
 const { exec } = require('child_process');
+const robot  = require('robotjs')
 const bodyParser = require('body-parser');
 const { GenerateContent } = require('./Ai');
 dotenv.config();
@@ -68,103 +69,103 @@ app.post('/open-app', async (req, res) => {
     }
 });
 
-// // Route for pressing keys
-// app.post('/key', (req, res) => {
-//     const { command } = req.body;
+// Route for pressing keys
+app.post('/key', (req, res) => {
+    const { command } = req.body;
 
-//     switch (command.toLowerCase()) {
-//         case "close":
-//             robot.keyTap("f4", ["alt"]);
-//             res.send("Closed the current window.");
-//             break;
+    switch (command.toLowerCase()) {
+        case "close":
+            robot.keyTap("f4", ["alt"]);
+            res.send("Closed the current window.");
+            break;
 
-//         case "switch window":
-//             robot.keyTap("tab", ["alt"]);
-//             res.send("Switched to the next window.");
-//             break;
+        case "switch window":
+            robot.keyTap("tab", ["alt"]);
+            res.send("Switched to the next window.");
+            break;
 
-//         case "restart system":
-//         case "restart":
-//             robot.keyTap("r", ["control", "alt"]);
-//             res.send("Restarting system...");
-//             break;
+        case "restart system":
+        case "restart":
+            robot.keyTap("r", ["control", "alt"]);
+            res.send("Restarting system...");
+            break;
 
-//         case "shutdown system":
-//         case "shut down":
-//             robot.keyTap("u", ["control", "alt"]);
-//             res.send("Shutting down system...");
-//             break;
+        case "shutdown system":
+        case "shut down":
+            robot.keyTap("u", ["control", "alt"]);
+            res.send("Shutting down system...");
+            break;
 
-//         case "lock screen":
-//             robot.keyTap("l", ["control", "command"]); // For Windows use "win"
-//             res.send("Locked the screen.");
-//             break;
+        case "lock screen":
+            robot.keyTap("l", ["control", "command"]); // For Windows use "win"
+            res.send("Locked the screen.");
+            break;
 
-//         case "minimize all":
-//             robot.keyTap("d", ["command"]); // Use "win" for Windows systems
-//             res.send("Minimized all windows.");
-//             break;
+        case "minimize all":
+            robot.keyTap("d", ["command"]); // Use "win" for Windows systems
+            res.send("Minimized all windows.");
+            break;
 
-//         case "volume up":
-//             robot.keyTap("volume_up");
-//             res.send("Increased volume.");
-//             break;
+        case "volume up":
+            robot.keyTap("volume_up");
+            res.send("Increased volume.");
+            break;
 
-//         case "volume down":
-//             robot.keyTap("volume_down");
-//             res.send("Decreased volume.");
-//             break;
+        case "volume down":
+            robot.keyTap("volume_down");
+            res.send("Decreased volume.");
+            break;
 
-//         case "mute volume":
-//         case "mute":
-//             robot.keyTap("audio_mute");
-//             res.send("Muted volume.");
-//             break;
+        case "mute volume":
+        case "mute":
+            robot.keyTap("audio_mute");
+            res.send("Muted volume.");
+            break;
 
-//         case "play or pause media":
-//             robot.keyTap("audio_play");
-//             res.send("Toggled play/pause for media.");
-//             break;
+        case "play or pause media":
+            robot.keyTap("audio_play");
+            res.send("Toggled play/pause for media.");
+            break;
 
-//         case "next track":
-//             robot.keyTap("audio_next");
-//             res.send("Skipped to the next track.");
-//             break;
+        case "next track":
+            robot.keyTap("audio_next");
+            res.send("Skipped to the next track.");
+            break;
 
-//         case "previous track":
-//             robot.keyTap("audio_prev");
-//             res.send("Went back to the previous track.");
-//             break;
+        case "previous track":
+            robot.keyTap("audio_prev");
+            res.send("Went back to the previous track.");
+            break;
 
-//         case "copy text":
-//             robot.keyTap("c", ["control"]);
-//             res.send("Copied text.");
-//             break;
+        case "copy text":
+            robot.keyTap("c", ["control"]);
+            res.send("Copied text.");
+            break;
 
-//         case "paste text":
-//             robot.keyTap("v", ["control"]);
-//             res.send("Pasted text.");
-//             break;
+        case "paste text":
+            robot.keyTap("v", ["control"]);
+            res.send("Pasted text.");
+            break;
 
-//         case "cut text":
-//             robot.keyTap("x", ["control"]);
-//             res.send("Cut text.");
-//             break;
+        case "cut text":
+            robot.keyTap("x", ["control"]);
+            res.send("Cut text.");
+            break;
 
-//         case "select all text":
-//             robot.keyTap("a", ["control"]);
-//             res.send("Selected all text.");
-//             break;
+        case "select all text":
+            robot.keyTap("a", ["control"]);
+            res.send("Selected all text.");
+            break;
 
-//         case "find text":
-//             robot.keyTap("f", ["control"]);
-//             res.send("Opened the find text dialog.");
-//             break;
+        case "find text":
+            robot.keyTap("f", ["control"]);
+            res.send("Opened the find text dialog.");
+            break;
 
-//         default:
-//             res.status(400).send("Command not recognized.");
-//     }
-// });
+        default:
+            res.status(400).send("Command not recognized.");
+    }
+});
 
 // Route for mouse actions
 app.post('/mouse-action', (req, res) => {
