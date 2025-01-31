@@ -171,6 +171,7 @@ const commands = {
      "shut down",
      "lock screen",
      "minimize all",
+     "minimise all",
      "mute",           // Opens the search bar (Ctrl+F)
   ],
 };

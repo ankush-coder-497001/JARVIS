@@ -86,33 +86,45 @@ app.post('/key', (req, res) => {
 
         case "restart system":
         case "restart":
-            robot.keyTap("r", ["control", "alt"]);
-            res.send("Restarting system...");
+            exec("shutdown -r -t 0", (err) => {
+                if (err) res.status(500).send("Failed to restart system.");
+                else res.send("Restarting system...");
+            });
             break;
 
         case "shutdown system":
         case "shut down":
-            robot.keyTap("u", ["control", "alt"]);
-            res.send("Shutting down system...");
+            exec("shutdown -s -t 0", (err) => {
+                if (err) res.status(500).send("Failed to shut down system.");
+                else res.send("Shutting down system...");
+            });
             break;
 
         case "lock screen":
-            robot.keyTap("l", ["control", "command"]); // For Windows use "win"
+            if (process.platform === "win32") {
+                robot.keyTap("l", ["win"]);
+            } else {
+                robot.keyTap("q", ["control", "command"]);
+            }
             res.send("Locked the screen.");
             break;
 
         case "minimize all":
-            robot.keyTap("d", ["command"]); // Use "win" for Windows systems
+            if (process.platform === "win32") {
+                robot.keyTap("d", ["win"]);
+            } else {
+                robot.keyTap("f11", ["command"]);
+            }
             res.send("Minimized all windows.");
             break;
 
         case "volume up":
-            robot.keyTap("volume_up");
+            robot.keyTap("audio_vol_up");
             res.send("Increased volume.");
             break;
 
         case "volume down":
-            robot.keyTap("volume_down");
+            robot.keyTap("audio_vol_down");
             res.send("Decreased volume.");
             break;
 
@@ -166,6 +178,7 @@ app.post('/key', (req, res) => {
             res.status(400).send("Command not recognized.");
     }
 });
+
 
 // Route for mouse actions
 app.post('/mouse-action', (req, res) => {
