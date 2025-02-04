@@ -2,7 +2,7 @@ const express  = require('express');
 const cors = require('cors')
 const dotenv = require('dotenv');
 const { exec } = require('child_process');
-const robot  = require('robotjs')
+// const robot  = require('robotjs')
 const bodyParser = require('body-parser');
 const { GenerateContent } = require('./Ai');
 dotenv.config();
