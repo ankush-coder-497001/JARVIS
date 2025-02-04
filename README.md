@@ -29,7 +29,7 @@ Jarvis is a voice-activated personal assistant designed to automate browser task
 
 ## How to Use Jarvis
 
-1. Visit the official Jarvis website: [https://j-a-r-v-i-s.netlify.app/](https://j-a-r-v-i-s.netlify.app/).
+1. Visit the official Jarvis website: [https://j-a-r-v-i-s.netlify.app/](https://jarvis02ai.netlify.app/mainpage).
 2. Speak your commands following these simple rules:
    - Include "Jarvis" in your query for answers.
    - Use "play" to start YouTube videos.
