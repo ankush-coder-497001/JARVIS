@@ -1,4 +1,5 @@
 import axios from "axios";
+import { MAIN_BASE_URL } from "./Base_URL";
 
 export const TellNewz = (text)=>{
   readOut(text);
@@ -66,12 +67,12 @@ export  const FetchNewz =()=>{
  })
  .catch((err)=>console.log(err))
 }
-
+console.log(import.meta.env.VITE_MAIN_BASE_URL)
 export  const handleGenerate = async (inputText,setLoading,setresult) => {
  const modifiedQuery = inputText.replace(/^jarvis\s+/i, "");
  setLoading(true);
  try {
-     const response = await axios.post('https://jarvis-1-u40v.onrender.com/generate', { text: modifiedQuery });
+     const response = await axios.post(`${MAIN_BASE_URL}/generate`, { text: modifiedQuery });
      setresult(response.data);
      readOut(response.data);
  } catch (error) {
@@ -125,7 +126,7 @@ export const HandleOnOpenApp = async (prompt)=>{
   let modifiedQuery = prompt.replace(/^open\s+/i, "");
   modifiedQuery = ConstructName(modifiedQuery);
     try {
-     const res = await axios.post('http://localhost:5001/open-app',{appName:modifiedQuery})
+     const res = await axios.post(`${MAIN_BASE_URL}/open-app`,{appName:modifiedQuery})
     } catch (error) {
       console.log(error)
     }
@@ -183,7 +184,7 @@ export const HandleSystemCommands = async (input) =>{
       const isValidMouse = commands.mouse.filter((str)=>str.includes(input.trim().split(" ")[0]));
       if(isValidMouse.length>0){
         try {
-          const res = await axios.post('http://localhost:5001/mouse-action',{action : isValidMouse[0]});
+          const res = await axios.post(`${MAIN_BASE_URL}/mouse-action`,{action : isValidMouse[0]});
           readOut(res.data);
           console.log(res)
         } catch (error) {
@@ -194,7 +195,7 @@ export const HandleSystemCommands = async (input) =>{
       const isValidKey = commands.keys.filter((str)=>str.includes(input.trim().split(" ")[0]));
       if(isValidKey.length>0){
         try {
-          const res = await axios.post('http://localhost:5001/key' , {command : isValidKey[0]});
+          const res = await axios.post(`${MAIN_BASE_URL}/key` , {command : isValidKey[0]});
           readOut(res.data)
           console.log(res.data)
         } catch (error) {
